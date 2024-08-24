@@ -1,11 +1,4 @@
-
-
-*:focus,
-*:active {
-  outline: none !important;
-  -webkit-tap-highlight-color: transparent;
-}
-
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 html,
 body {
   display: grid;
@@ -15,110 +8,137 @@ body {
   place-items: center;
   background-color: #111927;
   background-image: 
-      radial-gradient(at 47% 33%, hsla(236, 24%, 61%, 0.281) 0, transparent 59%), 
-      radial-gradient(at 82% 65%, hsl(218.00, 39%, 11%) 0, transparent 55%);
+      radial-gradient(at 47% 33%, hsla(162, 77%, 40%, 0.363) 0, transparent 59%), 
+      radial-gradient(at 82% 65%, hsl(218, 39%, 11%) 0, transparent 55%);
+}
+
+.hr {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: 20px 0;
 }
 
 /* Glassmorphism card effect */
-.card-glass {
-    backdrop-filter: blur(18px) saturate(200%);
-    -webkit-backdrop-filter: blur(18px) saturate(200%);
-    background-color: rgba(17, 25, 40, 0.76);
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.125);
+.glassmorphism {
+  backdrop-filter: blur(18px) saturate(200%);
+  -webkit-backdrop-filter: blur(18px) saturate(200%);
+  background-color: rgba(17, 25, 40, 0.76);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.125);
+}
+.outfit-deconame {
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 150px;
+  font-style: normal;
+}
+.card.glassmorphism {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
 }
 
-nav ul a {
-    color: inherit;
-    text-decoration: none;
-}
-
-.wrapper {
-  display: inline-flex;
-  list-style: none;
-}
-
-.wrapper .icon {
-  position: relative;
-  background: #ffffff;
-  border-radius:15px;
-  padding: 15px;
-  margin: 10px;
-  width: 50px;
-  height: 50px;
-  font-size: 18px;
+.card-img-top {
   display: flex;
   justify-content: center;
-  align-items: center;
+}
+
+.card-img-top img {
+  width: 50%; /* adjust the width as needed */
+  margin: 20px; /* add some margin to create space around the image */
+  border-radius: 50%;
+}
+
+.card-body {
+  display: flex;
   flex-direction: column;
-  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  align-items: center;
+  text-align: center;
+}
+
+.card-body h1 {
+  margin-bottom: 20px;
+  color: #fff;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.social-icons {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.social-icons li {
+  margin: 10px;
+}
+
+.social-link {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(17, 25, 40, 0.76);
+  border: 1px solid rgba(255, 255, 255, 0.125);
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transition: all 0.3s ease-in-out;
 }
 
-.wrapper .tooltip {
-  position: absolute;
-  top: 0;
-  font-size: 14px;
-  background: #ffffff;
-  color: #ffffff;
-  padding: 5px 8px;
-  border-radius: 5px;
-  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+.social-link:hover {
+  background-color: rgba(17, 25, 40, 0.9);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
-.wrapper .tooltip::before {
-  position: absolute;
-  content: "";
-  height: 8px;
-  width: 8px;
-  background: #ffffff;
-  bottom: -3px;
-  left: 50%;
-  transform: translate(-50%) rotate(45deg);
-  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+.social-link i {
+  font-size: 24px;
+  color: #fff;
+  margin: 8px;
 }
 
-.wrapper .icon:hover .tooltip {
-  top: -45px;
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
+.social-link.github {
+  background-color: #161414;
 }
 
-.wrapper .icon:hover span,
-.wrapper .icon:hover .tooltip {
-  text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.1);
+.social-link.github:hover {
+  background-color: #161414; /* brownish color */
 }
 
-.wrapper .github:hover,
-.wrapper .github:hover .tooltip,
-.wrapper .github:hover .tooltip::before {
-  background: #171515;
-  color: #ffffff;
+.social-link.x {
+  background-color: #1DA1F2;
 }
 
-.wrapper .x:hover,
-.wrapper .x:hover .tooltip,
-.wrapper .x:hover .tooltip::before {
-  background: #000000;
-  color: #ffffff;
+.social-link.x:hover {
+  background-color: #000; /* black color */
+  color: #fff;
 }
 
-.wrapper .instagram:hover,
-.wrapper .instagram:hover .tooltip,
-.wrapper .instagram:hover .tooltip::before {
-  background: #7a21b6;
-  color: #ffffff;
+.social-link.linkedin {
+  background-color: #0072b1;
 }
 
-.wrapper .youtube:hover,
-.wrapper .youtube:hover .tooltip,
-.wrapper .youtube:hover .tooltip::before {
-  background: #CD201F;
-  color: #ffffff;
+.social-link.linkedin:hover {
+  background-color: #006097; /* blue color */
 }
 
+.social-link.instagram {
+  background-color: #000; /* black color */
+  background-size: 100% 200px;
+  background-position: 0% 100%;
+  transition: background-position 0.3s ease-in-out;
+}
+
+.social-link.instagram:hover {
+  background-color: #000; 
+}
+
+.social-link.glassmorphism {
+  backdrop-filter: blur(18px) saturate(200%);
+  -webkit-backdrop-filter: blur(18px) saturate(200%);
+  background-color: rgba(17, 25, 40, 0.76);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.125);
+}
