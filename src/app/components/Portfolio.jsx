@@ -237,7 +237,7 @@ const Portfolio = () => {
               <div className="hidden sm:block w-1 h-1 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
               <div className="flex items-center gap-2"><Mail size={16} /><a href="mailto:hello@abhijeet.app" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">hello@abhijeet.app</a></div>
               <div className="hidden sm:block w-1 h-1 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
-              <div className="flex items-center gap-2"><span>(437) 557-4650</span></div>
+              
             </div>
 
             <div className="flex justify-center space-x-4 mb-12">
