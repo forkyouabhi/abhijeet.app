@@ -22,7 +22,7 @@ export const Contact = () => {
       icon: Linkedin,
       title: "LinkedIn",
       value: "Connect with me",
-      href: "https://linkedin.com/in/abhijeet",
+      href: "https://linkedin.com/in/abhijeet3101",
       color: "text-primary"
     }
   ];
