@@ -55,7 +55,7 @@ export const Hero = () => {
             <Github className="w-6 h-6" />
           </a>
           <a 
-            href="https://linkedin.com/in/abhijeet" 
+            href="https://linkedin.com/in/abhijeet3101" 
             target="_blank" 
             rel="noopener noreferrer"
             className="p-3 rounded-lg hover:bg-secondary transition-all duration-300 hover:scale-110"
