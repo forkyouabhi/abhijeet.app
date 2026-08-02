@@ -41,7 +41,7 @@ export const Education = () => {
                     <Calendar className="w-5 h-5 text-accent flex-shrink-0" />
                     <div>
                       <p className="text-sm font-semibold">Expected</p>
-                      <p className="text-sm text-muted-foreground">May 2027</p>
+                      <p className="text-sm text-muted-foreground">May 2028</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">

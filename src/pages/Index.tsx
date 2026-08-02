@@ -1,23 +1,25 @@
-import { Hero } from "@/components/Hero";
-import { FeaturedProject } from "@/components/FeaturedProject";
+import { AntiGravityHero } from "@/components/AntiGravityHero";
 import { About } from "@/components/About";
 import { Experience } from "@/components/Experience";
+import { FeaturedProject } from "@/components/FeaturedProject";
 import { Education } from "@/components/Education";
-import { Projects } from "@/components/Projects";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { Navbar } from "@/components/Navbar";
+import { CustomCursor } from "@/components/CustomCursor";
 
 const Index = () => {
   return (
     <div className="min-h-screen">
+      <CustomCursor />
+      <Navbar />
       <ThemeToggle />
-      <Hero />
-      <FeaturedProject />
+      <AntiGravityHero />
       <About />
       <Experience />
+      <FeaturedProject />
       <Education />
-      <Projects />
       <Contact />
       <Footer />
     </div>
