@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback, useState } from "react";
-import Matter from "matter-js";
+import type Matter from "matter-js";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Github, Linkedin, Mail, ChevronDown, Briefcase, Trophy, Rocket } from "lucide-react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
@@ -34,7 +34,7 @@ const TERMINAL_LINES = [
   "$ echo $STACK",
   "Python · FastAPI · SQL · React · Next.js",
   "$ status --current",
-  "→ Open to Fall 2026 co-ops",
+  "→ Open to Fall 2028 co-ops",
 ];
 
 // Spring transition presets (Apple §4)
@@ -165,16 +165,6 @@ export const AntiGravityHero = () => {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [mouseX, mouseY]);
 
-  const createWalls = useCallback((width: number, height: number) => {
-    const t = 60;
-    return [
-      Matter.Bodies.rectangle(width / 2, -t / 2, width + t * 2, t, { isStatic: true, restitution: 0.8 }),
-      Matter.Bodies.rectangle(width / 2, height + t / 2, width + t * 2, t, { isStatic: true, restitution: 0.8 }),
-      Matter.Bodies.rectangle(-t / 2, height / 2, t, height + t * 2, { isStatic: true, restitution: 0.8 }),
-      Matter.Bodies.rectangle(width + t / 2, height / 2, t, height + t * 2, { isStatic: true, restitution: 0.8 }),
-    ];
-  }, []);
-
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -197,113 +187,138 @@ export const AntiGravityHero = () => {
       return;
     }
 
-    const engine = Matter.Engine.create({
-      gravity: { x: 0, y: 0, scale: 0.001 },
-    });
-    engineRef.current = engine;
+    let active = true;
+    let handleMouseMove: (e: MouseEvent) => void;
+    let handleMouseLeave: () => void;
+    let handleResize: () => void;
+    let Matter: any;
 
-    const bodies = BADGES.map((badge) => {
-      const x = Math.random() * (width - badge.width - 120) + 60 + badge.width / 2;
-      const y = Math.random() * (height - badge.height - 120) + 60 + badge.height / 2;
+    import("matter-js").then((MatterModule) => {
+      if (!active) return;
+      Matter = MatterModule.default || MatterModule;
 
-      const body = Matter.Bodies.rectangle(x, y, badge.width, badge.height, {
-        restitution: 0.9,
-        friction: 0.05,
-        frictionAir: 0.015,
-        chamfer: { radius: 12 },
-        density: 0.002,
+      const createWallsLocal = (w: number, h: number) => {
+        const t = 60;
+        return [
+          Matter.Bodies.rectangle(w / 2, -t / 2, w + t * 2, t, { isStatic: true, restitution: 0.8 }),
+          Matter.Bodies.rectangle(w / 2, h + t / 2, w + t * 2, t, { isStatic: true, restitution: 0.8 }),
+          Matter.Bodies.rectangle(-t / 2, h / 2, t, h + t * 2, { isStatic: true, restitution: 0.8 }),
+          Matter.Bodies.rectangle(w + t / 2, h / 2, t, h + t * 2, { isStatic: true, restitution: 0.8 }),
+        ];
+      };
+
+      const engine = Matter.Engine.create({
+        gravity: { x: 0, y: 0, scale: 0.001 },
       });
+      engineRef.current = engine;
 
-      Matter.Body.setVelocity(body, {
-        x: (Math.random() - 0.5) * 2.5,
-        y: (Math.random() - 0.5) * 2.5,
+      const bodies = BADGES.map((badge) => {
+        const x = Math.random() * (width - badge.width - 120) + 60 + badge.width / 2;
+        const y = Math.random() * (height - badge.height - 120) + 60 + badge.height / 2;
+
+        const body = Matter.Bodies.rectangle(x, y, badge.width, badge.height, {
+          restitution: 0.9,
+          friction: 0.05,
+          frictionAir: 0.015,
+          chamfer: { radius: 12 },
+          density: 0.002,
+        });
+
+        Matter.Body.setVelocity(body, {
+          x: (Math.random() - 0.5) * 2.5,
+          y: (Math.random() - 0.5) * 2.5,
+        });
+        Matter.Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.03);
+        return body;
       });
-      Matter.Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.03);
-      return body;
-    });
-    badgeBodiesRef.current = bodies;
+      badgeBodiesRef.current = bodies;
 
-    const walls = createWalls(width, height);
-    wallsRef.current = walls;
-    Matter.Composite.add(engine.world, [...bodies, ...walls]);
+      const walls = createWallsLocal(width, height);
+      wallsRef.current = walls;
+      Matter.Composite.add(engine.world, [...bodies, ...walls]);
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = container.getBoundingClientRect();
-      mousePos.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-    };
-    const handleMouseLeave = () => { mousePos.current = null; };
+      handleMouseMove = (e: MouseEvent) => {
+        const rect = container.getBoundingClientRect();
+        mousePos.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      };
+      handleMouseLeave = () => { mousePos.current = null; };
 
-    container.addEventListener("mousemove", handleMouseMove, { passive: true });
-    container.addEventListener("mouseleave", handleMouseLeave, { passive: true });
+      container.addEventListener("mousemove", handleMouseMove, { passive: true });
+      container.addEventListener("mouseleave", handleMouseLeave, { passive: true });
 
-    const runner = Matter.Runner.create();
-    runnerRef.current = runner;
-    Matter.Runner.run(runner, engine);
+      const runner = Matter.Runner.create();
+      runnerRef.current = runner;
+      Matter.Runner.run(runner, engine);
 
-    const syncDOM = () => {
-      const mp = mousePos.current;
-      for (let i = 0; i < badgeBodiesRef.current.length; i++) {
-        const body = badgeBodiesRef.current[i];
-        const el = badgeElementsRef.current[i];
-        if (!el) continue;
+      const syncDOM = () => {
+        if (!active) return;
+        const mp = mousePos.current;
+        for (let i = 0; i < badgeBodiesRef.current.length; i++) {
+          const body = badgeBodiesRef.current[i];
+          const el = badgeElementsRef.current[i];
+          if (!el) continue;
 
-        if (mp) {
-          const dx = body.position.x - mp.x;
-          const dy = body.position.y - mp.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 150 && dist > 1) {
-            const force = 0.0004 * ((150 - dist) / 150);
-            Matter.Body.applyForce(body, body.position, {
-              x: (dx / dist) * force,
-              y: (dy / dist) * force,
-            });
+          if (mp) {
+            const dx = body.position.x - mp.x;
+            const dy = body.position.y - mp.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 150 && dist > 1) {
+              const force = 0.0004 * ((150 - dist) / 150);
+              Matter.Body.applyForce(body, body.position, {
+                x: (dx / dist) * force,
+                y: (dy / dist) * force,
+              });
+            }
+          } else {
+            if (body.speed < 0.5) {
+              Matter.Body.applyForce(body, body.position, {
+                x: (Math.random() - 0.5) * 0.0005,
+                y: (Math.random() - 0.5) * 0.0005,
+              });
+            }
           }
-        } else {
-          if (body.speed < 0.5) {
-            Matter.Body.applyForce(body, body.position, {
-              x: (Math.random() - 0.5) * 0.0005,
-              y: (Math.random() - 0.5) * 0.0005,
-            });
-          }
+
+          el.style.transform = `translate(${body.position.x - BADGES[i].width / 2}px, ${body.position.y - BADGES[i].height / 2}px) rotate(${body.angle}rad)`;
         }
+        animFrameRef.current = requestAnimationFrame(syncDOM);
+      };
 
-        el.style.transform = `translate(${body.position.x - BADGES[i].width / 2}px, ${body.position.y - BADGES[i].height / 2}px) rotate(${body.angle}rad)`;
-      }
-      animFrameRef.current = requestAnimationFrame(syncDOM);
-    };
-
-    requestAnimationFrame(() => {
-      badgeElementsRef.current.forEach((el) => {
-        if (el) el.style.opacity = "1";
+      requestAnimationFrame(() => {
+        badgeElementsRef.current.forEach((el) => {
+          if (el) el.style.opacity = "1";
+        });
       });
-    });
-    animFrameRef.current = requestAnimationFrame(syncDOM);
+      animFrameRef.current = requestAnimationFrame(syncDOM);
 
-    const handleResize = () => {
-      if (!containerRef.current || !engineRef.current) return;
-      const w = containerRef.current.offsetWidth;
-      const h = containerRef.current.offsetHeight;
-      if (wallsRef.current.length > 0) {
-        Matter.Composite.remove(engineRef.current.world, wallsRef.current);
-      }
-      const newWalls = createWalls(w, h);
-      wallsRef.current = newWalls;
-      Matter.Composite.add(engineRef.current.world, newWalls);
-    };
-    window.addEventListener("resize", handleResize);
+      handleResize = () => {
+        if (!containerRef.current || !engineRef.current) return;
+        const w = containerRef.current.offsetWidth;
+        const h = containerRef.current.offsetHeight;
+        if (wallsRef.current.length > 0) {
+          Matter.Composite.remove(engineRef.current.world, wallsRef.current);
+        }
+        const newWalls = createWallsLocal(w, h);
+        wallsRef.current = newWalls;
+        Matter.Composite.add(engineRef.current.world, newWalls);
+      };
+      window.addEventListener("resize", handleResize);
+    });
 
     return () => {
-      container.removeEventListener("mousemove", handleMouseMove);
-      container.removeEventListener("mouseleave", handleMouseLeave);
-      window.removeEventListener("resize", handleResize);
+      active = false;
+      if (handleMouseMove) container.removeEventListener("mousemove", handleMouseMove);
+      if (handleMouseLeave) container.removeEventListener("mouseleave", handleMouseLeave);
+      if (handleResize) window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(animFrameRef.current);
-      if (runnerRef.current) Matter.Runner.stop(runnerRef.current);
-      if (engineRef.current) {
-        Matter.World.clear(engineRef.current.world, false);
-        Matter.Engine.clear(engineRef.current);
+      if (Matter) {
+        if (runnerRef.current) Matter.Runner.stop(runnerRef.current);
+        if (engineRef.current) {
+          Matter.World.clear(engineRef.current.world, false);
+          Matter.Engine.clear(engineRef.current);
+        }
       }
     };
-  }, [createWalls]);
+  }, []);
 
   return (
     <section ref={sectionRef} className="min-h-screen relative overflow-hidden" id="hero">
@@ -547,10 +562,10 @@ export const AntiGravityHero = () => {
                   line.startsWith("$")
                     ? "text-accent font-semibold"
                     : line.startsWith("✓")
-                    ? "text-green-400/90 pl-2"
-                    : line.startsWith("→")
-                    ? "text-primary pl-2"
-                    : "text-muted-foreground pl-2"
+                      ? "text-green-400/90 pl-2"
+                      : line.startsWith("→")
+                        ? "text-primary pl-2"
+                        : "text-muted-foreground pl-2"
                 }
               >
                 {line}

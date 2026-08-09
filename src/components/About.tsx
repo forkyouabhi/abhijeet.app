@@ -1,15 +1,9 @@
+import React, { lazy, Suspense } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Code2, Rocket, MapPin, Coffee, Terminal, Flame } from "lucide-react";
 import { motion, Variants } from "framer-motion";
-import { Area, AreaChart, ResponsiveContainer, Tooltip } from "recharts";
 
-const analyticsData = [
-  { time: "Q1", efficiency: 45 },
-  { time: "Q2", efficiency: 52 },
-  { time: "Q3", efficiency: 68 },
-  { time: "Q4", efficiency: 89 },
-  { time: "Q1", efficiency: 95 },
-];
+const AnalyticsChart = lazy(() => import('./AnalyticsChart').then(m => ({ default: m.AnalyticsChart })));
 
 export const About = () => {
   const container: Variants = {
@@ -143,28 +137,9 @@ export const About = () => {
               <p className="text-lg md:text-xl font-bold mb-3 md:mb-4">Supply Chain KPI</p>
               
               <div className="flex-1 w-full min-h-[80px] -ml-4">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={analyticsData}>
-                    <defs>
-                      <linearGradient id="colorEfficiency" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="hsl(25 85% 55%)" stopOpacity={0.8}/>
-                        <stop offset="95%" stopColor="hsl(25 85% 55%)" stopOpacity={0}/>
-                      </linearGradient>
-                    </defs>
-                    <Tooltip 
-                      contentStyle={{ backgroundColor: 'hsl(335 45% 12%)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
-                      itemStyle={{ color: '#fff' }}
-                    />
-                    <Area 
-                      type="monotone" 
-                      dataKey="efficiency" 
-                      stroke="hsl(25 85% 55%)" 
-                      strokeWidth={3}
-                      fillOpacity={1} 
-                      fill="url(#colorEfficiency)" 
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
+                <Suspense fallback={<div className="w-full h-full animate-pulse bg-white/5 rounded-md" />}>
+                  <AnalyticsChart />
+                </Suspense>
               </div>
             </Card>
           </motion.div>
