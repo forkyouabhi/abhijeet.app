@@ -44,6 +44,7 @@ export const Navbar = () => {
         {/* Logo */}
         <motion.a
           href="#"
+          aria-label="Home"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ type: "spring", bounce: 0, duration: 0.5 }}
@@ -95,6 +96,8 @@ export const Navbar = () => {
             variant="ghost"
             size="icon"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-expanded={mobileMenuOpen}
+            aria-label="Toggle navigation menu"
             className="text-foreground active:scale-90 transition-transform"
           >
             <AnimatePresence mode="wait" initial={false}>

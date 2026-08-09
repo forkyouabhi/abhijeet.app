@@ -504,14 +504,17 @@ export const AntiGravityHero = () => {
             className="flex items-center justify-center gap-3 sm:gap-4 pt-2 md:pt-4 pointer-events-auto"
           >
             <a href="https://github.com/forkyouabhi" target="_blank" rel="noopener noreferrer"
+              aria-label="GitHub Profile"
               className="p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-300 active:scale-90 hover:scale-105">
               <Github className="w-5 h-5" />
             </a>
             <a href="https://linkedin.com/in/abhijeet3101" target="_blank" rel="noopener noreferrer"
+              aria-label="LinkedIn Profile"
               className="p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-300 active:scale-90 hover:scale-105">
               <Linkedin className="w-5 h-5" />
             </a>
             <a href="mailto:hello@abhijeet.app"
+              aria-label="Email Me"
               className="p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-300 active:scale-90 hover:scale-105">
               <Mail className="w-5 h-5" />
             </a>
