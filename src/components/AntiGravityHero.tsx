@@ -181,6 +181,21 @@ export const AntiGravityHero = () => {
 
     const width = container.offsetWidth;
     const height = container.offsetHeight;
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+    if (isMobile) {
+      requestAnimationFrame(() => {
+        badgeElementsRef.current.forEach((el, i) => {
+          if (!el) return;
+          el.style.opacity = "1";
+          const x = Math.random() * Math.max(width - BADGES[i].width - 40, 0) + 20;
+          const y = Math.random() * Math.max(height - BADGES[i].height - 100, 0) + 50;
+          const angle = (Math.random() - 0.5) * 0.4;
+          el.style.transform = `translate(${x}px, ${y}px) rotate(${angle}rad)`;
+        });
+      });
+      return;
+    }
 
     const engine = Matter.Engine.create({
       gravity: { x: 0, y: 0, scale: 0.001 },
