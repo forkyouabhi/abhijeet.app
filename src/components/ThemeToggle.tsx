@@ -1,8 +1,13 @@
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-export const ThemeToggle = () => {
+interface ThemeToggleProps {
+  className?: string;
+}
+
+export const ThemeToggle = ({ className = "" }: ThemeToggleProps) => {
   const [theme, setTheme] = useState<"light" | "dark">("light");
 
   useEffect(() => {
@@ -26,14 +31,34 @@ export const ThemeToggle = () => {
       variant="ghost"
       size="icon"
       onClick={toggleTheme}
-      className="fixed top-6 right-6 z-50 rounded-full hover:scale-110 transition-transform duration-300"
+      className={`rounded-full active:scale-95 transition-transform duration-150 ${className}`}
       aria-label="Toggle theme"
     >
-      {theme === "light" ? (
-        <Moon className="h-5 w-5" />
-      ) : (
-        <Sun className="h-5 w-5" />
-      )}
+      <AnimatePresence mode="wait" initial={false}>
+        {theme === "light" ? (
+          <motion.span
+            key="moon"
+            initial={{ rotate: -90, opacity: 0 }}
+            animate={{ rotate: 0, opacity: 1 }}
+            exit={{ rotate: 90, opacity: 0 }}
+            transition={{ type: "spring", bounce: 0, duration: 0.3 }}
+            className="flex items-center justify-center"
+          >
+            <Moon className="h-[1.2rem] w-[1.2rem]" />
+          </motion.span>
+        ) : (
+          <motion.span
+            key="sun"
+            initial={{ rotate: 90, opacity: 0 }}
+            animate={{ rotate: 0, opacity: 1 }}
+            exit={{ rotate: -90, opacity: 0 }}
+            transition={{ type: "spring", bounce: 0, duration: 0.3 }}
+            className="flex items-center justify-center"
+          >
+            <Sun className="h-[1.2rem] w-[1.2rem]" />
+          </motion.span>
+        )}
+      </AnimatePresence>
     </Button>
   );
 };

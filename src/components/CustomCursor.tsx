@@ -42,6 +42,7 @@ export const CustomCursor = () => {
 
   return (
     <>
+      {/* Inner dot — critically damped, fast response (Apple §4) */}
       <motion.div
         className="fixed top-0 left-0 w-4 h-4 bg-accent rounded-full pointer-events-none z-[100] mix-blend-difference hidden md:block"
         animate={{
@@ -52,11 +53,11 @@ export const CustomCursor = () => {
         }}
         transition={{
           type: "spring",
-          stiffness: 1000,
-          damping: 50,
-          mass: 0.1,
+          bounce: 0,
+          duration: 0.15,
         }}
       />
+      {/* Outer ring — slightly softer spring for trailing feel */}
       <motion.div
         className="fixed top-0 left-0 w-10 h-10 border border-accent rounded-full pointer-events-none z-[99] hidden md:block"
         animate={{
@@ -67,9 +68,8 @@ export const CustomCursor = () => {
         }}
         transition={{
           type: "spring",
-          stiffness: 250,
-          damping: 20,
-          mass: 0.5,
+          bounce: 0,
+          duration: 0.25,
         }}
       />
     </>

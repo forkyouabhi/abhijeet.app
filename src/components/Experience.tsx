@@ -3,7 +3,7 @@ import { SpotlightCard } from "@/components/ui/SpotlightCard";
 import { Briefcase, Calendar, MapPin } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface ExperienceItem {
   id: string;
@@ -86,21 +86,26 @@ const experiences: ExperienceItem[] = [
   },
 ];
 
+// Spring transition matching Apple's critically damped defaults
+const springContent = { type: "spring" as const, bounce: 0, duration: 0.4 };
+
 export const Experience = () => {
   const [activeTab, setActiveTab] = useState(experiences[0].id);
 
+  const activeExperience = experiences.find(e => e.id === activeTab);
+
   return (
-    <section className="py-24 px-4" id="experience">
+    <section className="py-20 md:py-24 px-4" id="experience">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          transition={{ type: "spring", bounce: 0, duration: 0.5 }}
+          className="text-center mb-12 md:mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Experience</h2>
-          <p className="text-xl text-muted-foreground">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 md:mb-4">Experience</h2>
+          <p className="text-lg md:text-xl text-muted-foreground">
             Enterprise IT, supply chain analytics & beyond
           </p>
         </motion.div>
@@ -109,24 +114,24 @@ export const Experience = () => {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.7, delay: 0.1 }}
+          transition={{ type: "spring", bounce: 0, duration: 0.5, delay: 0.1 }}
         >
           <Tabs
             value={activeTab}
             onValueChange={setActiveTab}
-            className="flex flex-col md:flex-row gap-6 lg:gap-10"
+            className="flex flex-col md:flex-row gap-4 md:gap-6 lg:gap-10"
             orientation="vertical"
           >
             <div className="w-full md:w-72 shrink-0 overflow-x-auto md:overflow-visible">
-              <TabsList className="flex md:flex-col h-auto bg-transparent p-0 justify-start w-full border-b md:border-b-0 md:border-l-2 rounded-none space-x-2 md:space-x-0 overflow-x-auto pb-px md:pb-0">
+              <TabsList className="flex md:flex-col h-auto bg-transparent p-0 justify-start w-full border-b md:border-b-0 md:border-l-2 rounded-none space-x-1.5 md:space-x-0 overflow-x-auto pb-px md:pb-0">
                 {experiences.map((exp) => (
                   <TabsTrigger
                     key={exp.id}
                     value={exp.id}
-                    className="md:w-full justify-start rounded-none border-b-2 md:border-b-0 md:border-l-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-primary/5 data-[state=active]:shadow-none data-[state=active]:text-primary text-left px-4 py-3 hover:bg-muted/50 transition-colors whitespace-nowrap md:whitespace-normal"
+                    className="md:w-full justify-start rounded-none border-b-2 md:border-b-0 md:border-l-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-primary/5 data-[state=active]:shadow-none data-[state=active]:text-primary text-left px-3 md:px-4 py-2.5 md:py-3 hover:bg-muted/50 active:scale-[0.98] transition-all whitespace-nowrap md:whitespace-normal"
                   >
                     <div className="flex flex-col items-start gap-0.5">
-                      <span className="font-semibold">{exp.shortName}</span>
+                      <span className="font-semibold text-sm md:text-base">{exp.shortName}</span>
                       <span className="text-xs text-muted-foreground hidden md:block">
                         {exp.period}
                       </span>
@@ -137,75 +142,88 @@ export const Experience = () => {
             </div>
 
             <div className="flex-1 min-w-0">
-              {experiences.map((exp) => (
-                <TabsContent
-                  key={exp.id}
-                  value={exp.id}
-                  className="mt-0 focus-visible:ring-0 focus-visible:outline-none animate-in fade-in-50 slide-in-from-bottom-2 duration-300"
-                >
-                  <SpotlightCard className="hover:border-accent/50 transition-colors">
-                    <CardContent className="p-6 md:p-8">
-                      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
-                        <div className="flex-1">
-                          <div className="flex items-start gap-3">
-                            <div className="p-2 bg-accent/10 rounded-lg shrink-0 mt-1 hidden sm:block">
-                              <Briefcase className="w-5 h-5 text-accent" />
+              <AnimatePresence mode="wait">
+                {activeExperience && (
+                  <TabsContent
+                    key={activeExperience.id}
+                    value={activeExperience.id}
+                    forceMount
+                    className="mt-0 focus-visible:ring-0 focus-visible:outline-none"
+                  >
+                    <motion.div
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={springContent}
+                    >
+                      <SpotlightCard className="hover:border-accent/50 transition-colors">
+                        <CardContent className="p-5 md:p-6 lg:p-8">
+                          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3 md:gap-4 mb-5 md:mb-6">
+                            <div className="flex-1">
+                              <div className="flex items-start gap-3">
+                                <div className="p-2 bg-accent/10 rounded-lg shrink-0 mt-1 hidden sm:block">
+                                  <Briefcase className="w-5 h-5 text-accent" />
+                                </div>
+                                <div>
+                                  <h3 className="text-xl md:text-2xl font-bold leading-tight mb-1">
+                                    {activeExperience.title}
+                                  </h3>
+                                  <p className="text-base md:text-lg text-primary font-semibold hidden md:block">
+                                    {activeExperience.company}
+                                  </p>
+                                  <p className="text-sm text-muted-foreground mt-1 flex items-center gap-1">
+                                    <MapPin className="w-3.5 h-3.5" />
+                                    {activeExperience.location}
+                                  </p>
+                                </div>
+                              </div>
                             </div>
-                            <div>
-                              <h3 className="text-2xl font-bold leading-tight mb-1">
-                                {exp.title}
-                              </h3>
-                              <p className="text-lg text-primary font-semibold hidden md:block">
-                                {exp.company}
-                              </p>
-                              <p className="text-sm text-muted-foreground mt-1 flex items-center gap-1">
-                                <MapPin className="w-3.5 h-3.5" />
-                                {exp.location}
-                              </p>
+                            <div className="flex flex-col items-start md:items-end gap-2 shrink-0">
+                              <div className="flex items-center gap-2 text-sm text-muted-foreground font-medium">
+                                <Calendar className="w-4 h-4" />
+                                {activeExperience.period}
+                              </div>
+                              <div className="flex flex-wrap gap-2 mt-1">
+                                <span
+                                  className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                                    activeExperience.current
+                                      ? "bg-accent/10 text-accent"
+                                      : "bg-secondary text-secondary-foreground"
+                                  }`}
+                                >
+                                  {activeExperience.type}
+                                </span>
+                                {activeExperience.current && (
+                                  <span className="px-2.5 py-0.5 bg-accent text-accent-foreground rounded-full text-xs font-semibold">
+                                    Current
+                                  </span>
+                                )}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="flex flex-col items-start md:items-end gap-2 shrink-0">
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground font-medium">
-                            <Calendar className="w-4 h-4" />
-                            {exp.period}
-                          </div>
-                          <div className="flex flex-wrap gap-2 mt-1">
-                            <span
-                              className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                                exp.current
-                                  ? "bg-accent/10 text-accent"
-                                  : "bg-secondary text-secondary-foreground"
-                              }`}
-                            >
-                              {exp.type}
-                            </span>
-                            {exp.current && (
-                              <span className="px-2.5 py-0.5 bg-accent text-accent-foreground rounded-full text-xs font-semibold">
-                                Current
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
 
-                      <ul className="space-y-3 md:ml-12 mt-4">
-                        {exp.achievements.map((achievement, i) => (
-                          <li
-                            key={i}
-                            className="text-muted-foreground flex items-start gap-3 leading-relaxed"
-                          >
-                            <span className="text-accent mt-1.5 shrink-0 text-lg leading-none">
-                              •
-                            </span>
-                            <span>{achievement}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </CardContent>
-                  </SpotlightCard>
-                </TabsContent>
-              ))}
+                          <ul className="space-y-2.5 md:space-y-3 md:ml-12 mt-3 md:mt-4">
+                            {activeExperience.achievements.map((achievement, i) => (
+                              <motion.li
+                                key={i}
+                                initial={{ opacity: 0, x: -8 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ ...springContent, delay: i * 0.04 }}
+                                className="text-muted-foreground flex items-start gap-2.5 md:gap-3 leading-relaxed text-sm md:text-base"
+                              >
+                                <span className="text-accent mt-1 shrink-0 text-lg leading-none">
+                                  •
+                                </span>
+                                <span>{achievement}</span>
+                              </motion.li>
+                            ))}
+                          </ul>
+                        </CardContent>
+                      </SpotlightCard>
+                    </motion.div>
+                  </TabsContent>
+                )}
+              </AnimatePresence>
             </div>
           </Tabs>
         </motion.div>

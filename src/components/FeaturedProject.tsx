@@ -19,7 +19,7 @@ import {
   Database,
   Server
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 
 interface Project {
   title: string;
@@ -90,40 +90,40 @@ const projects: Project[] = [
   },
 ];
 
-const container = {
+const container: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    transition: { staggerChildren: 0.2 },
+    transition: { staggerChildren: 0.15 },
   },
 };
 
-const item = {
-  hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+const item: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { type: "spring", bounce: 0, duration: 0.5 } },
 };
 
 export const FeaturedProject = () => {
   return (
-    <section className="py-24 px-4" id="projects">
+    <section className="py-20 md:py-24 px-4" id="projects">
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          transition={{ type: "spring", bounce: 0, duration: 0.5 }}
+          className="text-center mb-12 md:mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 md:mb-4">
             Featured Projects
           </h2>
-          <p className="text-xl text-muted-foreground">
+          <p className="text-lg md:text-xl text-muted-foreground">
             Enterprise tools & live platforms
           </p>
         </motion.div>
 
         <motion.div
-          className="grid md:grid-cols-2 gap-8"
+          className="grid md:grid-cols-2 gap-6 md:gap-8"
           variants={container}
           initial="hidden"
           whileInView="show"
@@ -134,20 +134,20 @@ export const FeaturedProject = () => {
               <Dialog>
                 <DialogTrigger asChild>
                   <div className="h-full cursor-pointer group">
-                    <SpotlightCard className="h-full group-hover:border-accent/50 group-hover:shadow-glow transition-all duration-500">
+                    <SpotlightCard className="h-full group-hover:border-accent/50 group-hover:shadow-glow transition-all duration-500 active:scale-[0.98] transform-gpu">
                       <div className="p-0 flex flex-col h-full">
                         {/* Visual header */}
                         <div
-                          className={`relative h-48 bg-gradient-to-br ${project.accentColor} flex items-center justify-center p-8 overflow-hidden`}
+                          className={`relative h-40 md:h-48 bg-gradient-to-br ${project.accentColor} flex items-center justify-center p-6 md:p-8 overflow-hidden`}
                         >
                           <div className="absolute -right-8 -top-8 w-32 h-32 bg-accent/10 rounded-full blur-2xl" />
                           <div className="absolute -left-8 -bottom-8 w-24 h-24 bg-primary/10 rounded-full blur-2xl" />
 
-                          <div className="text-center space-y-3 relative z-10">
+                          <div className="text-center space-y-2 md:space-y-3 relative z-10">
                             <div className="text-accent group-hover:scale-110 transition-transform duration-500">
                               {project.icon}
                             </div>
-                            <h3 className="text-3xl font-bold">{project.title}</h3>
+                            <h3 className="text-2xl md:text-3xl font-bold">{project.title}</h3>
                             {project.isInternal && (
                               <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-background/60 backdrop-blur-sm rounded-full text-xs font-medium text-muted-foreground">
                                 <Lock className="w-3 h-3" />
@@ -158,12 +158,12 @@ export const FeaturedProject = () => {
                         </div>
 
                         {/* Content */}
-                        <div className="p-6 md:p-8 flex flex-col flex-1 space-y-5">
+                        <div className="p-5 md:p-6 lg:p-8 flex flex-col flex-1 space-y-4 md:space-y-5">
                           <div>
-                            <div className="inline-block px-3 py-1 bg-accent/10 text-accent rounded-full text-sm font-semibold mb-3">
+                            <div className="inline-block px-3 py-1 bg-accent/10 text-accent rounded-full text-sm font-semibold mb-2 md:mb-3">
                               {project.role}
                             </div>
-                            <p className="text-muted-foreground leading-relaxed line-clamp-3">
+                            <p className="text-muted-foreground leading-relaxed line-clamp-3 text-sm md:text-base">
                               {project.description}
                             </p>
                           </div>
@@ -180,15 +180,15 @@ export const FeaturedProject = () => {
                   </div>
                 </DialogTrigger>
 
-                <DialogContent className="max-w-2xl bg-background/95 backdrop-blur-2xl border-white/10 glassmorphism p-0 overflow-hidden">
-                  <div className={`h-32 bg-gradient-to-br ${project.accentColor} flex items-center p-8 relative overflow-hidden`}>
+                <DialogContent className="max-w-2xl bg-background/95 backdrop-blur-2xl border-white/10 glassmorphism p-0 overflow-hidden max-h-[90vh] overflow-y-auto">
+                  <div className={`h-28 md:h-32 bg-gradient-to-br ${project.accentColor} flex items-center p-6 md:p-8 relative overflow-hidden`}>
                      <div className="absolute -right-8 -top-8 w-32 h-32 bg-accent/10 rounded-full blur-2xl" />
-                     <div className="relative z-10 flex items-center gap-4">
-                        <div className="p-4 bg-background/50 backdrop-blur-md rounded-2xl border border-white/10 text-accent">
+                     <div className="relative z-10 flex items-center gap-3 md:gap-4">
+                        <div className="p-3 md:p-4 bg-background/50 backdrop-blur-md rounded-2xl border border-white/10 text-accent">
                           {project.icon}
                         </div>
                         <div>
-                          <DialogTitle className="text-3xl font-bold">{project.title}</DialogTitle>
+                          <DialogTitle className="text-2xl md:text-3xl font-bold">{project.title}</DialogTitle>
                           <DialogDescription className="text-foreground/80 font-medium">
                             {project.role}
                           </DialogDescription>
@@ -196,24 +196,24 @@ export const FeaturedProject = () => {
                      </div>
                   </div>
                   
-                  <div className="p-8 space-y-8">
-                    <div className="space-y-4">
+                  <div className="p-6 md:p-8 space-y-6 md:space-y-8">
+                    <div className="space-y-3 md:space-y-4">
                       <h4 className="text-sm font-bold tracking-widest text-muted-foreground uppercase flex items-center gap-2">
                         <Database className="w-4 h-4" /> 
                         System Architecture
                       </h4>
-                      <p className="text-lg leading-relaxed text-foreground/90">
+                      <p className="text-base md:text-lg leading-relaxed text-foreground/90">
                         {project.architectureDetails?.overview}
                       </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
+                      <div className="space-y-3 md:space-y-4">
                         <h4 className="text-sm font-bold tracking-widest text-muted-foreground uppercase flex items-center gap-2">
                           <Activity className="w-4 h-4" />
                           Key Metrics
                         </h4>
-                        <ul className="space-y-3">
+                        <ul className="space-y-2.5 md:space-y-3">
                           {project.architectureDetails?.metrics.map((metric, i) => (
                             <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
                               <Zap className="w-4 h-4 text-accent shrink-0 mt-0.5" />
@@ -223,7 +223,7 @@ export const FeaturedProject = () => {
                         </ul>
                       </div>
                       
-                      <div className="space-y-4">
+                      <div className="space-y-3 md:space-y-4">
                         <h4 className="text-sm font-bold tracking-widest text-muted-foreground uppercase flex items-center gap-2">
                           <Server className="w-4 h-4" />
                           Tech Stack
@@ -242,7 +242,7 @@ export const FeaturedProject = () => {
                     </div>
 
                     {project.link ? (
-                      <Button variant="accent" className="w-full group" asChild>
+                      <Button variant="accent" className="w-full group active:scale-[0.98] transition-transform" asChild>
                         <a href={project.link} target="_blank" rel="noopener noreferrer">
                           {project.linkLabel}
                           <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -266,14 +266,14 @@ export const FeaturedProject = () => {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.4 }}
-          className="text-center mt-12"
+          transition={{ delay: 0.3 }}
+          className="text-center mt-10 md:mt-12"
         >
           <a
             href="https://github.com/forkyouabhi"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-muted-foreground hover:text-accent transition-colors font-medium group"
+            className="inline-flex items-center gap-2 text-muted-foreground hover:text-accent transition-colors font-medium group active:scale-95"
           >
             <ExternalLink className="w-4 h-4" />
             View more on GitHub

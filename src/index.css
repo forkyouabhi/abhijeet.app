@@ -105,10 +105,16 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -150,9 +156,10 @@ All colors MUST be HSL.
     }
   }
 
-  /* Premium Glassmorphism Utility */
+  /* Premium Glassmorphism Utility — Apple-style translucency */
   .glassmorphism {
     @apply bg-background/60 backdrop-blur-xl border border-white/10;
+    -webkit-backdrop-filter: blur(24px);
     box-shadow: var(--shadow-soft);
   }
 
@@ -160,8 +167,24 @@ All colors MUST be HSL.
     box-shadow: var(--shadow-soft);
   }
 
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
   .hero-grid {
     background-size: 40px 40px;
     background-image: radial-gradient(circle, hsl(var(--foreground)) 1px, transparent 1px);
+  }
+}
+
+/* Reduced motion — respect user system preference (Apple §1) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
