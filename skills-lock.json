@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "skills": {
+    "cinematic-web-dev": {
+      "source": "ygstudio-game/awesome-cinematic-web-dev",
+      "commit": "0d0f0b09ba6d3afe0f5c70260fff9b771ca2fcf6",
+      "sourceType": "github",
+      "skillPath": "skills/cinematic-web-dev/SKILL.md",
+      "computedHash": "b859308168860064c6343678b13239cf4f94fced7c2cbd397182e642049a0567"
+    }
+  }
+}
